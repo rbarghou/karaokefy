@@ -1,14 +1,23 @@
 #! /usr/local/bin/python
-
 import os
+
+from audio_separator.separator import Separator
 from google.cloud import storage
 
-bucket_name = "karaoke-songs-for-lam-presentation"
+BUCKET, OBJECT = os.environ["BUCKET"], os.environ["OBJECT"]
+FILENAME = os.path.basename(OBJECT)
+
 storage_client = storage.Client()
-bucket = storage_client.get_bucket(bucket_name)
+bucket = storage_client.get_bucket(BUCKET)
 
-print(f"{(os.environ.get('FOO'), os.environ.get('BAR'))=}")
+blob = bucket.blob(OBJECT)
+blob.download_to_filename(FILENAME)
 
-# blob = bucket.blob('file-name')
-# with blob.open("w") as f:
-#     f.write('Hello, World!')
+separator = Separator()
+separator.load_model()
+
+primary_step_output_path, secondary_stem_output_path = separator.separate(FILENAME)
+
+print(f"{primary_step_output_path, secondary_stem_output_path=}")
+
+print(os.path.listdir())
