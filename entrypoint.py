@@ -16,8 +16,10 @@ blob.download_to_filename(FILENAME)
 separator = Separator()
 separator.load_model()
 
-primary_step_output_path, secondary_stem_output_path = separator.separate(FILENAME)
+primary_stem_output_path, secondary_stem_output_path = separator.separate(FILENAME)
 
-print(f"{primary_step_output_path, secondary_stem_output_path=}")
+primary_blob = bucket.blob(f"split_songs/{primary_stem_output_path}")
+primary_blob.upload_from_filename(primary_stem_output_path)
 
-print(os.path.listdir())
+secondary_blob = bucket.blob(f"split_songs/{secondary_stem_output_path}")
+secondary_blob.upload_from_filename(secondary_stem_output_path)
