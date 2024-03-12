@@ -13,7 +13,7 @@ bucket = storage_client.get_bucket(BUCKET)
 blob = bucket.blob(OBJECT)
 blob.download_to_filename(FILENAME)
 
-separator = Separator()
+separator = Separator(output_format="MP3")
 separator.load_model()
 
 primary_stem_output_path, secondary_stem_output_path = separator.separate(FILENAME)
