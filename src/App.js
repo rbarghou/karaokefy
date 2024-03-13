@@ -24,7 +24,8 @@ function App() {
               <li>{key}
                 <ul>
                   <li>status: {value.status}</li>
-                  <li><a href={value.song_link}>song link</a></li>
+                  <li><a href={value.song_link}>Karaoke Version song link</a></li>
+                  <li><a href={value.YoutubeURL}>Original YoutubeLink</a></li>
                 </ul>
               </li>
             ))}
