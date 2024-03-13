@@ -25,6 +25,15 @@ function App() {
   const handleYoutubeUrlSubmit = (event) => {
     event.preventDefault();
     console.log(youtubeUrl);
+    axios.post(
+      "https://submit-song-request-lfc4i6czha-uc.a.run.app",
+      {"YoutubeURL": youtubeUrl},
+      {'Access-Control-Allow-Origin': '*'}
+    ).then(response => {
+      setYoutubeUrl("");
+    }).catch(error => {
+      console.log(error);
+    })
   };
 
 
