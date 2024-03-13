@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/karaokefy/static/css/main.c0e2d5c9.css",
-    "main.js": "/karaokefy/static/js/main.e848942a.js",
+    "main.js": "/karaokefy/static/js/main.584ccb13.js",
     "static/js/453.39afac03.chunk.js": "/karaokefy/static/js/453.39afac03.chunk.js",
     "index.html": "/karaokefy/index.html",
     "main.c0e2d5c9.css.map": "/karaokefy/static/css/main.c0e2d5c9.css.map",
-    "main.e848942a.js.map": "/karaokefy/static/js/main.e848942a.js.map",
+    "main.584ccb13.js.map": "/karaokefy/static/js/main.584ccb13.js.map",
     "453.39afac03.chunk.js.map": "/karaokefy/static/js/453.39afac03.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c0e2d5c9.css",
-    "static/js/main.e848942a.js"
+    "static/js/main.584ccb13.js"
   ]
 }
