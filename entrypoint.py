@@ -1,4 +1,6 @@
 #! /usr/local/bin/python
+
+# this script is the separator job.
 import os
 
 from audio_separator.separator import Separator
