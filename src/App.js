@@ -1,21 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import MicIcon from '@mui/icons-material/Mic';
+import PendingIcon from '@mui/icons-material/Pending';
+import React, { useState, useEffect, useRef } from 'react';
+import { usePageVisibility } from './usePageVisibility';
 import axios from 'axios';
 import './App.css';
 
 function App() {
-  const [data, setData] = useState({});
+  const isPageVisible = usePageVisibility();
+  const [data, setData] = useState([]);
   const [youtubeUrl, setYoutubeUrl] = useState("");
+  const timerIdRef = useRef(null);
 
-  useEffect(() => {
+  const get_song_list = () => {
     axios.get("https://us-central1-lam-presentation.cloudfunctions.net/get_song_list")
         .then(response => {
-            setData(response.data);
-            console.log(response.data);
+          var songs = Object.values(response.data);
+          songs = songs.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+          console.log(songs);
+          setData(songs);
         })
         .catch(error => {
-            console.log(error)
+          console.log(error)
         })
-  }, []);
+  };
+
+  useEffect(() => {
+    const pollingCallback = () => {
+      get_song_list();
+    }
+    const startPolling = () => {
+      timerIdRef.current = setInterval(pollingCallback, 10000);
+      console.log(timerIdRef.current);
+    }
+    const stopPolling = () => {
+      clearInterval(timerIdRef.current);
+    }
+    if (isPageVisible) {
+      stopPolling();
+      startPolling();
+    } else {
+      stopPolling();
+    }
+  }, [isPageVisible]);
+
+  useEffect(() => {
+    get_song_list();
+  }, [])
 
   const handleYoutubeUrlChange = (event) => {
     const { value } = event.target;
@@ -31,10 +62,13 @@ function App() {
       {'Access-Control-Allow-Origin': '*'}
     ).then(response => {
       setYoutubeUrl("");
+      window.location.reload(false);
     }).catch(error => {
       console.log(error);
     })
   };
+
+  
 
 
   return (
@@ -46,17 +80,29 @@ function App() {
             <input type="text" name="YoutubeURL" onChange={handleYoutubeUrlChange}/>
             <input type="submit" value="Submit" onClick={handleYoutubeUrlSubmit}/>
           </form>
-          <ol>
-            {Object.entries(data).map(([key, value]) => (
-              <li>{key}
-                <ul>
-                  <li>status: {value.status}</li>
-                  <li><a href={value.song_link} target="_blank" rel="noreferrer">Karaoke Version song link</a></li>
-                  <li><a href={value.YoutubeURL} target="_blank" rel="noreferrer">Original YoutubeLink</a></li>
-                </ul>
-              </li>
-            ))}
-          </ol>
+
+          {
+            (data.length > 0) ?
+            (
+              <div> 
+                
+                {data.map(song => (
+                  <div>
+                    <a href={song.youtubeUrl}>
+                      <YouTubeIcon/>
+                    </a>
+                    <a href={song.song_link}>
+                      <MicIcon/>
+                    </a>
+                    {song.title}
+                    {((song.status !== "complete") && (<PendingIcon/>))}
+                  </div>
+                ))} 
+              </div>
+            )
+            :(<div>loading...</div>)
+
+          }
         </div>
       </header>
     </div>
