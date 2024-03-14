@@ -6,6 +6,18 @@ import { usePageVisibility } from './usePageVisibility';
 import axios from 'axios';
 import './App.css';
 
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import TextField from '@mui/material/TextField';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+
+
+
 function App() {
   const isPageVisible = usePageVisibility();
   const [data, setData] = useState([]);
@@ -72,39 +84,52 @@ function App() {
 
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <div>
-          <form>
-            <label>Song Request YouTube URL: </label>
-            <input type="text" name="YoutubeURL" onChange={handleYoutubeUrlChange}/>
-            <input type="submit" value="Submit" onClick={handleYoutubeUrlSubmit}/>
-          </form>
+    <div>
+      <CssBaseline/>
+      <Box sx={{ m: 3 }} component="form">
+        <AppBar position="fixed">
+          <Toolbar>
+            <Typography variant="h5">
+              Song Request YouTube URL: 
+            </Typography>
+            <TextField 
+              sx={{ml: 3, width: '50%', color: "white"}}
+              variant="outlined" 
+              label="[Youtube URL]"
+              onChange={handleYoutubeUrlChange} />
+            <Button variant="contained"
+              onClick={handleYoutubeUrlSubmit}>
+                Submit
+            </Button>
+          </Toolbar>
+        </AppBar>
+      </Box> 
+      <Box sx={{ pt: 10}}>
 
-          {
-            (data.length > 0) ?
-            (
-              <div> 
-                
-                {data.map(song => (
-                  <div>
-                    <a href={song.youtubeUrl}>
-                      <YouTubeIcon/>
-                    </a>
-                    <a href={song.song_link}>
-                      <MicIcon/>
-                    </a>
-                    {song.title}
-                    {((song.status !== "complete") && (<PendingIcon/>))}
-                  </div>
-                ))} 
-              </div>
-            )
-            :(<div>loading...</div>)
 
-          }
-        </div>
-      </header>
+        {
+          (data.length > 0) ?
+          (
+            <List> 
+              
+              {data.map(song => (
+                <ListItem>
+                  <a href={song.YoutubeURL}>
+                    <YouTubeIcon/>
+                  </a>
+                  <a href={song.song_link}>
+                    <MicIcon/>
+                  </a>
+                  {song.title}
+                  {((song.status !== "complete") && (<PendingIcon/>))}
+                </ListItem>
+              ))} 
+            </List>
+          )
+          :(<div>loading...</div>)
+
+        }
+      </Box>
     </div>
   );
 }
